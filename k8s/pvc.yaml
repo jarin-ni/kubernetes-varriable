@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: $(PVC_NAME)
+  name: nextcloud-nfs-pvc-var
   namespace: nextcloud
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: $(STORAGE_CLASS)
+  storageClassName: nfs-storage-var
   resources:
     requests:
       storage: 50Gi
