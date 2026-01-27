@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: $(PV_NAME)
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: $(STORAGE_CLASS)
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: $(NFS_SERVER)
+    path: $(NFS_PATH)
+

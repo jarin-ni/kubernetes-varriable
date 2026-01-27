@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: smileshosting-prod-nextcloud
+  namespace: argocd
+spec:
+  project: nextcloud-var   # ← MUST MATCH ARGO_PROJECT_NAME
+
+  source:
+    repoURL: https://github.com/jarin-ni/kubernetes-varriable.git  # <-- change here the repo
+    targetRevision: main
+    path: k8s
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nextcloud
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+

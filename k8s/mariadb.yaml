@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $(APP_NAME)-mariadb
+  namespace: $(NAMESPACE)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: $(APP_NAME)-mariadb
+  template:
+    metadata:
+      labels:
+        app: $(APP_NAME)-mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:10.11
+          envFrom:
+            - secretRef:
+                name: nextcloud-secret
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: $(PVC_NAME)
+

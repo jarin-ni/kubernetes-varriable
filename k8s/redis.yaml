@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $(APP_NAME)-redis
+  namespace: $(NAMESPACE)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: $(APP_NAME)-redis
+  template:
+    metadata:
+      labels:
+        app: $(APP_NAME)-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.4.2
+          args: ["redis-server","--appendonly","yes"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: $(PVC_NAME)
+

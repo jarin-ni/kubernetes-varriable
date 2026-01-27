@@ -1,0 +1,82 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - argocd-project.yaml
+  - namespace.yaml
+  - storageclass.yaml
+  - pv.yaml
+  - pvc.yaml
+  - secret.yaml
+  - mariadb.yaml
+  - redis.yaml
+  - nextcloud.yaml
+  - cron.yaml
+  - service.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  - name: env-vars
+    envs:
+      - .env
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+vars:
+  - name: ARGO_PROJECT_NAME
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.ARGO_PROJECT_NAME
+
+  - name: NAMESPACE
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.NAMESPACE
+
+  - name: APP_NAME
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.APP_NAME
+
+  - name: STORAGE_CLASS
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.STORAGE_CLASS
+
+  - name: PV_NAME
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.PV_NAME
+
+  - name: PVC_NAME
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.PVC_NAME
+
+  - name: INGRESS_HOST
+    objref:
+      kind: ConfigMap
+      name: env-vars
+      apiVersion: v1
+    fieldref:
+      fieldpath: data.INGRESS_HOST
+
