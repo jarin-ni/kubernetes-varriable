@@ -21,7 +21,7 @@ spec:
       server: https://kubernetes.default.svc
     - namespace: prod
       server: https://kubernetes.default.svc
-    - namespace: $(NAMESPACE)
+    - namespace: nextcloud
       server: https://kubernetes.default.svc
 
   clusterResourceWhitelist:
