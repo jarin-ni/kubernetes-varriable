@@ -97,8 +97,19 @@ Ensure your NFS server is configured and accessible from all cluster nodes.
 
 ### Secrets Management
 
-Create the required secrets before deployment:
+The deployment includes a basic secret with placeholder values. **Important:** Change the default passwords before deploying to production!
 
+To update the secret:
+
+1. Generate base64 encoded passwords:
+   ```bash
+   echo -n "your-actual-root-password" | base64
+   echo -n "your-actual-db-password" | base64
+   ```
+
+2. Edit `k8s/secret.yaml` and replace the `data` values with your encoded passwords
+
+Or create the secret manually:
 ```bash
 kubectl create secret generic nextcloud-secret \
   --namespace nextcloud \
