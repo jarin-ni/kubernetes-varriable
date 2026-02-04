@@ -31,37 +31,17 @@ git clone https://github.com/jarin-ni/kubernetes-varriable.git
 cd kubernetes-varriable
 ```
 
-### 2. Update ArgoCD Application Parameters
+### 2. Customize Configuration
 
-Edit `argocd-app.yaml` to match your environment:
+Edit the YAML files in the `k8s/` directory to match your environment:
 
-```yaml
-spec:
-  source:
-    repoURL: https://github.com/jarin-ni/kubernetes-varriable.git  # Change to your repo
-    kustomize:
-      parameters:
-        - name: ARGO_PROJECT_NAME
-          value: nextcloud-var  # Your ArgoCD project name
-        - name: NAMESPACE
-          value: nextcloud      # Target namespace
-        - name: APP_NAME
-          value: nextcloud-var  # Application name prefix
-        - name: INGRESS_HOST
-          value: nextcloud.example.com  # Your domain
-        - name: STORAGE_CLASS
-          value: nfs-storage-var        # Storage class name
-        - name: PV_NAME
-          value: nextcloud-nfs-pv-var   # Persistent volume name
-        - name: PVC_NAME
-          value: nextcloud-nfs-pvc-var  # Persistent volume claim name
-        - name: PV_SIZE
-          value: 50Gi                  # Storage size
-        - name: NFS_SERVER
-          value: 192.168.2.218         # NFS server IP
-        - name: NFS_PATH
-          value: /srv/nfs/k8s/nextcloud-var  # NFS path
-```
+- `namespace.yaml`: Change namespace name
+- `nextcloud.yaml`: Update app names, namespace, and environment variables
+- `ingress.yaml`: Set your domain name
+- `pv.yaml` & `pvc.yaml`: Configure storage settings
+- `mariadb.yaml` & `redis.yaml`: Adjust database and cache settings
+
+For different environments, create separate branches or use Kustomize overlays.
 
 ### 3. Apply ArgoCD Application
 
@@ -136,16 +116,10 @@ The ingress uses Traefik with the host specified in parameters. Ensure your DNS 
 
 If you prefer manual deployment without ArgoCD:
 
-1. Update the `k8s/.env` file with your values (if using the old method)
-2. Run the replacement script:
+1. Edit the YAML files in `k8s/` to set your desired values
+2. Apply the manifests:
    ```bash
-   cd k8s
-   chmod +x replace_namespace.sh
-   ./replace_namespace.sh
-   ```
-3. Apply manifests:
-   ```bash
-   kubectl apply -k .
+   kubectl apply -k k8s/
    ```
 
 ## Monitoring and Maintenance

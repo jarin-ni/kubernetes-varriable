@@ -1,20 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: $(APP_NAME)-ingress
-  namespace: $(NAMESPACE)
+  name: nextcloud-var-ingress
+  namespace: nextcloud
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-    - host: $(INGRESS_HOST)
+    - host: nextcloud.example.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: $(APP_NAME)
+                name: nextcloud-var
                 port:
                   number: 80
 

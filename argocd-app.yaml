@@ -10,28 +10,6 @@ spec:
     repoURL: https://github.com/jarin-ni/kubernetes-varriable.git  # <-- change here the repo
     targetRevision: main
     path: k8s
-    kustomize:
-      parameters:
-        - name: ARGO_PROJECT_NAME
-          value: nextcloud-var
-        - name: NAMESPACE
-          value: nextcloud
-        - name: APP_NAME
-          value: nextcloud-var
-        - name: INGRESS_HOST
-          value: nextcloud.example.com
-        - name: STORAGE_CLASS
-          value: nfs-storage-var
-        - name: PV_NAME
-          value: nextcloud-nfs-pv-var
-        - name: PVC_NAME
-          value: nextcloud-nfs-pvc-var
-        - name: PV_SIZE
-          value: 50Gi
-        - name: NFS_SERVER
-          value: 192.168.2.218
-        - name: NFS_PATH
-          value: /srv/nfs/k8s/nextcloud-var
 
   destination:
     server: https://kubernetes.default.svc

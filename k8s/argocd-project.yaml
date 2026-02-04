@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: $(ARGO_PROJECT_NAME)
+  name: nextcloud-var
   namespace: argocd
 spec:
   description: App of Apps project with multi-environment support
