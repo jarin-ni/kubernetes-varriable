@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: init-permissions
           image: busybox
-          command: ["sh", "-c", "chown -R 33:33 /var/www/html"]
+          command: ["sh", "-c", "mkdir -p /var/www/html/config /var/www/html/data /var/www/html/apps /var/www/html/themes && chown -R 33:33 /var/www/html/config /var/www/html/data /var/www/html/apps /var/www/html/themes"]
           volumeMounts:
             - name: data
               mountPath: /var/www/html
@@ -40,9 +40,9 @@ spec:
                   - |
                     sleep 30
                     su -s /bin/bash www-data -c "
-                      php occ config:system:set trusted_domains 1 --value=nextcloud.example.com
-                      php occ config:system:set overwrite.cli.url --value=https://nextcloud.example.com
-                      php occ config:system:set overwritehost --value=nextcloud.example.com
+                      php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com
+                      php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com
+                      php occ config:system:set overwritehost --value=nextcloud.smileshosting.com
                       php occ config:system:set overwriteprotocol --value=https
                     "
           volumeMounts:

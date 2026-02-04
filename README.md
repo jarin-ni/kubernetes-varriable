@@ -182,7 +182,7 @@ To update Nextcloud version:
    kubectl describe pod <pod-name> -n nextcloud
    ```
 
-3. **Can't write into config directory**: This is automatically fixed by the initContainer that sets permissions. If issues persist, check NFS mount permissions.
+3. **Can't write into config directory**: This is automatically fixed by the initContainer that sets permissions on essential directories. If issues persist, check NFS mount permissions.
 
 4. **SQLite database warning**: Ensure the `nextcloud-secret` contains correct MariaDB credentials and the MariaDB service is running.
 
