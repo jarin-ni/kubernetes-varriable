@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-    - host: nextcloud.example.com
+    - host: nextcloud.smileshosting.com
       http:
         paths:
           - path: /
