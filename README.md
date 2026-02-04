@@ -101,30 +101,39 @@ Ensure your NFS server is configured and accessible from all cluster nodes.
 
 ### Secrets Management
 
-**⚠️ IMPORTANT:** The deployment includes a basic secret with placeholder values. You **MUST** change these to real passwords before the application will work!
+**CRITICAL: Configuration errors are caused by incorrect database passwords!**
 
-**Current status:** The secret contains base64-encoded placeholder passwords that will cause database connection failures.
+**The error "Configuration was not read or initialized correctly" means Nextcloud cannot connect to MariaDB due to wrong passwords.**
 
-To update with your actual passwords:
+**You MUST update the secret with real passwords or Nextcloud cannot initialize config.php.**
 
-1. Generate base64 encoded passwords:
+**Steps to fix:**
+
+1. **Generate real passwords:**
    ```bash
-   echo -n "your-actual-root-password" | base64
-   echo -n "your-actual-db-password" | base64
-   echo -n "your-admin-password" | base64
+   # Choose secure passwords
+   ROOT_PASS="your-secure-root-password"
+   DB_PASS="your-secure-db-password" 
+   ADMIN_PASS="your-secure-admin-password"
+   
+   # Encode to base64
+   echo -n "$ROOT_PASS" | base64
+   echo -n "$DB_PASS" | base64
+   echo -n "$ADMIN_PASS" | base64
    ```
 
-2. Edit `k8s/secret.yaml` and replace the `data` values:
-   ```yaml
-   data:
-     MYSQL_ROOT_PASSWORD: <base64-of-your-root-password>
-     MYSQL_PASSWORD: <base64-of-your-db-password>
-     MYSQL_DATABASE: bmV4dGNsb3Vk  # nextcloud
-     MYSQL_USER: bmV4dGNsb3Vk      # nextcloud
-     NEXTCLOUD_ADMIN_PASSWORD: <base64-of-your-admin-password>
+2. **Update `k8s/secret.yaml`:**
+   Replace `<base64-of-your-root-password>` etc. with the actual base64 values
+
+3. **Apply the changes:**
+   ```bash
+   kubectl apply -f k8s/secret.yaml
+   kubectl apply -f k8s/nextcloud.yaml
    ```
 
-3. Edit `k8s/nextcloud.yaml` and update the admin user/password in the env section if desired.
+4. **Restart the pod** (via ArgoCD or kubectl)
+
+**Without correct passwords, Nextcloud cannot create config.php and will fail with configuration errors.**
 
 4. Commit and push, or apply manually:
    ```bash
