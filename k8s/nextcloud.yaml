@@ -28,6 +28,20 @@ spec:
               value: nextcloud-var-mariadb
             - name: REDIS_HOST
               value: nextcloud-var-redis
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - |
+                    sleep 30
+                    su -s /bin/bash www-data -c "
+                      php occ config:system:set trusted_domains 1 --value=nextcloud.example.com
+                      php occ config:system:set overwrite.cli.url --value=https://nextcloud.example.com
+                      php occ config:system:set overwritehost --value=nextcloud.example.com
+                      php occ config:system:set overwriteprotocol --value=https
+                    "
           volumeMounts:
             - name: data
               mountPath: /var/www/html

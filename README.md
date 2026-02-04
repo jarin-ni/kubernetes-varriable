@@ -78,7 +78,7 @@ spec:
 
 Ensure your NFS server is configured and accessible from all cluster nodes.
 
-**Permission Fix**: The Nextcloud deployment includes an initContainer that automatically sets correct permissions (chown 33:33) on the mounted volume for the www-data user.
+**Note:** The automatic configuration uses `nextcloud.example.com` as the domain. Update `k8s/ingress.yaml` and the postStart command in `k8s/nextcloud.yaml` if you use a different domain.
 
 ### Application Components
 
@@ -86,6 +86,7 @@ Ensure your NFS server is configured and accessible from all cluster nodes.
 - Image: `nextcloud:27`
 - Environment variables configured for MariaDB and Redis
 - Persistent storage mounted at `/var/www/html`
+- **Automatic Configuration**: Post-start hook automatically configures trusted domains and Traefik overwrite settings
 
 #### MariaDB
 - Image: `mariadb:10.11`
