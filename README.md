@@ -111,6 +111,7 @@ To update with your actual passwords:
    ```bash
    echo -n "your-actual-root-password" | base64
    echo -n "your-actual-db-password" | base64
+   echo -n "your-admin-password" | base64
    ```
 
 2. Edit `k8s/secret.yaml` and replace the `data` values:
@@ -120,14 +121,18 @@ To update with your actual passwords:
      MYSQL_PASSWORD: <base64-of-your-db-password>
      MYSQL_DATABASE: bmV4dGNsb3Vk  # nextcloud
      MYSQL_USER: bmV4dGNsb3Vk      # nextcloud
+     NEXTCLOUD_ADMIN_PASSWORD: <base64-of-your-admin-password>
    ```
 
-3. Commit and push, or apply manually:
+3. Edit `k8s/nextcloud.yaml` and update the admin user/password in the env section if desired.
+
+4. Commit and push, or apply manually:
    ```bash
    kubectl apply -f k8s/secret.yaml
+   kubectl apply -f k8s/nextcloud.yaml
    ```
 
-**Without correct database passwords, Nextcloud will show "Internal Server Error" or fail to connect to MariaDB.**
+**Without correct database and admin passwords, Nextcloud will show "Internal Server Error" or fail to connect to MariaDB.**
 
 ### Ingress Configuration
 

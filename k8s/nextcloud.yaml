@@ -28,6 +28,10 @@ spec:
               value: nextcloud-var-mariadb
             - name: REDIS_HOST
               value: nextcloud-var-redis
+            - name: NEXTCLOUD_ADMIN_USER
+              value: admin
+            - name: NEXTCLOUD_ADMIN_PASSWORD
+              value: changeme123
           envFrom:
             - secretRef:
                 name: nextcloud-secret
