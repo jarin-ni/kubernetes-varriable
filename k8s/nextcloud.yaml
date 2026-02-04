@@ -47,18 +47,24 @@ spec:
                       if su -s /bin/bash www-data -c "php occ status" 2>/dev/null | grep -q "installed: true"; then
                         echo "Nextcloud is ready, configuring..."
                         su -s /bin/bash www-data -c "
-                          php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com
-                          php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com
-                          php occ config:system:set overwritehost --value=nextcloud.smileshosting.com
-                          php occ config:system:set overwriteprotocol --value=https
-                        "
+                          php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com --quiet
+                          php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com --quiet
+                          php occ config:system:set overwritehost --value=nextcloud.smileshosting.com --quiet
+                          php occ config:system:set overwriteprotocol --value=https --quiet
+                        " 2>&1 | tee /tmp/nextcloud-config.log
                         echo "Configuration completed"
                         exit 0
                       fi
                       echo "Waiting... ($i/60)"
                       sleep 10
                     done
-                    echo "Nextcloud not ready after 10 minutes, skipping configuration"
+                    echo "Nextcloud not ready after 10 minutes, running config anyway..."
+                    su -s /bin/bash www-data -c "
+                      php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com --quiet
+                      php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com --quiet
+                      php occ config:system:set overwritehost --value=nextcloud.smileshosting.com --quiet
+                      php occ config:system:set overwriteprotocol --value=https --quiet
+                    " 2>&1 | tee /tmp/nextcloud-config.log
           volumeMounts:
             - name: data
               mountPath: /var/www/html
