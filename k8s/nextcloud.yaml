@@ -28,6 +28,9 @@ spec:
               value: nextcloud-var-mariadb
             - name: REDIS_HOST
               value: nextcloud-var-redis
+          envFrom:
+            - secretRef:
+                name: nextcloud-secret
           lifecycle:
             postStart:
               exec:

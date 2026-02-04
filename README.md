@@ -85,6 +85,7 @@ Ensure your NFS server is configured and accessible from all cluster nodes.
 #### Nextcloud
 - Image: `nextcloud:27`
 - Environment variables configured for MariaDB and Redis
+- Database credentials loaded from `nextcloud-secret`
 - Persistent storage mounted at `/var/www/html`
 - **Automatic Configuration**: Post-start hook automatically configures trusted domains and Traefik overwrite settings
 
@@ -183,7 +184,9 @@ To update Nextcloud version:
 
 3. **Can't write into config directory**: This is automatically fixed by the initContainer that sets permissions. If issues persist, check NFS mount permissions.
 
-4. **Ingress Not Working**: Verify Traefik installation and DNS configuration
+4. **SQLite database warning**: Ensure the `nextcloud-secret` contains correct MariaDB credentials and the MariaDB service is running.
+
+5. **Ingress Not Working**: Verify Traefik installation and DNS configuration
    ```bash
    kubectl get ingress -n nextcloud
    ```
