@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextcloud-var-mariadb
-  namespace: nextcloud
+  name: $(APP_NAME)-mariadb
+  namespace: $(NAMESPACE)
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nextcloud-var-mariadb
+      app: $(APP_NAME)-mariadb
   template:
     metadata:
       labels:
-        app: nextcloud-var-mariadb
+        app: $(APP_NAME)-mariadb
     spec:
       containers:
         - name: mariadb
@@ -25,5 +25,5 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: nextcloud-nfs-pvc-var
+            claimName: $(PVC_NAME)
 

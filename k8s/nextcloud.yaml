@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextcloud-var
-  namespace: nextcloud
+  name: $(APP_NAME)
+  namespace: $(NAMESPACE)
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nextcloud-var
+      app: $(APP_NAME)
   template:
     metadata:
       labels:
-        app: nextcloud-var
+        app: $(APP_NAME)
     spec:
       containers:
-        - name: nextcloud-var
+        - name: $(APP_NAME)
           image: nextcloud:27
           env:
             - name: MYSQL_HOST
-              value: nextcloud-var-mariadb
+              value: $(APP_NAME)-mariadb
             - name: REDIS_HOST
-              value: nextcloud-var-redis
+              value: $(APP_NAME)-redis
           volumeMounts:
             - name: data
               mountPath: /var/www/html
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: nextcloud-nfs-pvc-var
+            claimName: $(PVC_NAME)
 

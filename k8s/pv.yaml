@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nextcloud-nfs-pv-var
+  name: $(PV_NAME)
 spec:
   capacity:
-    storage: 50Gi
+    storage: $(PV_SIZE)
   accessModes:
     - ReadWriteMany
-  storageClassName: nfs-storage-var
+  storageClassName: $(STORAGE_CLASS)
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: 192.168.2.218
-    path: /srv/nfs/k8s/nextcloud-var
+    server: $(NFS_SERVER)
+    path: $(NFS_PATH)
 
