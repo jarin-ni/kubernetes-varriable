@@ -78,6 +78,8 @@ spec:
 
 Ensure your NFS server is configured and accessible from all cluster nodes.
 
+**Permission Fix**: The Nextcloud deployment includes an initContainer that automatically sets correct permissions (chown 33:33) on the mounted volume for the www-data user.
+
 ### Application Components
 
 #### Nextcloud
@@ -178,7 +180,9 @@ To update Nextcloud version:
    kubectl describe pod <pod-name> -n nextcloud
    ```
 
-3. **Ingress Not Working**: Verify Traefik installation and DNS configuration
+3. **Can't write into config directory**: This is automatically fixed by the initContainer that sets permissions. If issues persist, check NFS mount permissions.
+
+4. **Ingress Not Working**: Verify Traefik installation and DNS configuration
    ```bash
    kubectl get ingress -n nextcloud
    ```

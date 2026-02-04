@@ -13,6 +13,13 @@ spec:
       labels:
         app: nextcloud-var
     spec:
+      initContainers:
+        - name: init-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 33:33 /var/www/html"]
+          volumeMounts:
+            - name: data
+              mountPath: /var/www/html
       containers:
         - name: nextcloud-var
           image: nextcloud:27
