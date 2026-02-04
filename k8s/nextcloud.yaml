@@ -38,13 +38,23 @@ spec:
                   - /bin/bash
                   - -c
                   - |
-                    sleep 30
-                    su -s /bin/bash www-data -c "
-                      php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com
-                      php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com
-                      php occ config:system:set overwritehost --value=nextcloud.smileshosting.com
-                      php occ config:system:set overwriteprotocol --value=https
-                    "
+                    echo "Waiting for Nextcloud to be ready..."
+                    for i in {1..60}; do
+                      if su -s /bin/bash www-data -c "php occ status" 2>/dev/null | grep -q "installed: true"; then
+                        echo "Nextcloud is ready, configuring..."
+                        su -s /bin/bash www-data -c "
+                          php occ config:system:set trusted_domains 1 --value=nextcloud.smileshosting.com
+                          php occ config:system:set overwrite.cli.url --value=https://nextcloud.smileshosting.com
+                          php occ config:system:set overwritehost --value=nextcloud.smileshosting.com
+                          php occ config:system:set overwriteprotocol --value=https
+                        "
+                        echo "Configuration completed"
+                        exit 0
+                      fi
+                      echo "Waiting... ($i/60)"
+                      sleep 10
+                    done
+                    echo "Nextcloud not ready after 10 minutes, skipping configuration"
           volumeMounts:
             - name: data
               mountPath: /var/www/html

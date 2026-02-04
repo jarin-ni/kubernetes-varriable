@@ -101,9 +101,11 @@ Ensure your NFS server is configured and accessible from all cluster nodes.
 
 ### Secrets Management
 
-The deployment includes a basic secret with placeholder values. **Important:** Change the default passwords before deploying to production!
+**⚠️ IMPORTANT:** The deployment includes a basic secret with placeholder values. You **MUST** change these to real passwords before the application will work!
 
-To update the secret:
+**Current status:** The secret contains base64-encoded placeholder passwords that will cause database connection failures.
+
+To update with your actual passwords:
 
 1. Generate base64 encoded passwords:
    ```bash
@@ -111,17 +113,21 @@ To update the secret:
    echo -n "your-actual-db-password" | base64
    ```
 
-2. Edit `k8s/secret.yaml` and replace the `data` values with your encoded passwords
+2. Edit `k8s/secret.yaml` and replace the `data` values:
+   ```yaml
+   data:
+     MYSQL_ROOT_PASSWORD: <base64-of-your-root-password>
+     MYSQL_PASSWORD: <base64-of-your-db-password>
+     MYSQL_DATABASE: bmV4dGNsb3Vk  # nextcloud
+     MYSQL_USER: bmV4dGNsb3Vk      # nextcloud
+   ```
 
-Or create the secret manually:
-```bash
-kubectl create secret generic nextcloud-secret \
-  --namespace nextcloud \
-  --from-literal=MYSQL_ROOT_PASSWORD=your-root-password \
-  --from-literal=MYSQL_PASSWORD=your-db-password \
-  --from-literal=MYSQL_DATABASE=nextcloud \
-  --from-literal=MYSQL_USER=nextcloud
-```
+3. Commit and push, or apply manually:
+   ```bash
+   kubectl apply -f k8s/secret.yaml
+   ```
+
+**Without correct database passwords, Nextcloud will show "Internal Server Error" or fail to connect to MariaDB.**
 
 ### Ingress Configuration
 
@@ -184,9 +190,11 @@ To update Nextcloud version:
 
 3. **Can't write into config directory**: This is automatically fixed by the initContainer that sets permissions on essential directories. If issues persist, check NFS mount permissions.
 
-4. **SQLite database warning**: Ensure the `nextcloud-secret` contains correct MariaDB credentials and the MariaDB service is running.
+4. **Internal Server Error (500)**: Usually caused by incorrect database credentials in `nextcloud-secret`. Update the secret with real passwords as described above.
 
-5. **Ingress Not Working**: Verify Traefik installation and DNS configuration
+5. **SQLite database warning**: Ensure the `nextcloud-secret` contains correct MariaDB credentials and the MariaDB service is running.
+
+6. **Ingress Not Working**: Verify Traefik installation and DNS configuration
    ```bash
    kubectl get ingress -n nextcloud
    ```
